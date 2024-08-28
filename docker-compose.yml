@@ -6,23 +6,26 @@ networks:
 
 services:
   nginx:
-    container_name: nginx
     image: nginx:latest
     restart: always
     ports: 
       - 80:80
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    container_name: web_server
     networks:
       - api-connection
     depends_on:
       - nest-api
 
   nest-api:
-    build: 
-      dockerfile: ./nest-api/Dockerfile
+    build:
+      context: ./nest-api
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=dev
     volumes:
       - ./nest-api:/app
     networks:
