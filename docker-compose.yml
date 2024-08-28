@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  api-connection:
+    driver: bridge
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: always
+    ports: 
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - api-connection
+    depends_on:
+      - nest-api
+
+  nest-api:
+    build: 
+      dockerfile: ./nest-api/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nest-api:/app
+    networks:
+      - api-connection
+    

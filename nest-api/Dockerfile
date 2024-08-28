@@ -1,13 +1,13 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json yarn.lock* ./
+ 
+RUN yarn install --frozen-lockfile 
 
 COPY . .
 
 RUN yarn build
 
-EXPOSE 3000
-
-CMD ['yarn', "run", "start:prod"]
+CMD ['yarn', "start:prod"]
